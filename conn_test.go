@@ -345,46 +345,6 @@ func TestSetLeecher(t *testing.T) {
 	panicOnErr(conn.RemoveTorrent(testTorrent))
 }
 
-func TestIncrementSlots(t *testing.T) {
-	conn := createTestConn()
-	testUser := createTestUser()
-	panicOnErr(conn.AddUser(testUser))
-	numSlots := testUser.Slots
-
-	panicOnErr(conn.IncrementSlots(testUser))
-	foundUser, _, err := conn.FindUser(testUser.Passkey)
-	panicOnErr(err)
-
-	if foundUser.Slots != numSlots+1 {
-		t.Error("cached slots not incremented")
-	}
-	if testUser.Slots != numSlots+1 {
-		t.Error("local slots not incremented")
-	}
-	// Cleanup
-	panicOnErr(conn.RemoveUser(testUser))
-}
-
-func TestDecrementSlots(t *testing.T) {
-	conn := createTestConn()
-	testUser := createTestUser()
-	panicOnErr(conn.AddUser(testUser))
-	numSlots := testUser.Slots
-
-	panicOnErr(conn.DecrementSlots(testUser))
-	foundUser, _, err := conn.FindUser(testUser.Passkey)
-	panicOnErr(err)
-
-	if foundUser.Slots != numSlots-1 {
-		t.Error("cached slots not incremented")
-	}
-	if testUser.Slots != numSlots-1 {
-		t.Error("local slots not incremented")
-	}
-	// Cleanup
-	panicOnErr(conn.RemoveUser(testUser))
-}
-
 func TestLeecherFinished(t *testing.T) {
 	conn := createTestConn()
 	testTorrent := createTestTorrent()

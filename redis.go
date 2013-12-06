@@ -135,10 +135,6 @@ func createUser(userVals []string) (*storage.User, error) {
 			user.UpMultiplier, err = strconv.ParseFloat(userVals[index+1], 64)
 		case "down_multiplier":
 			user.DownMultiplier, err = strconv.ParseFloat(userVals[index+1], 64)
-		case "slots":
-			user.Slots, err = strconv.ParseInt(userVals[index+1], 10, 64)
-		case "slots_used":
-			user.SlotsUsed, err = strconv.ParseInt(userVals[index+1], 10, 64)
 		case "snatches":
 			user.Snatches, err = strconv.ParseUint(userVals[index+1], 10, 64)
 		}
@@ -406,8 +402,6 @@ func (conn *Conn) AddUser(u *storage.User) error {
 		"passkey", u.Passkey,
 		"up_multiplier", u.UpMultiplier,
 		"down_multiplier", u.DownMultiplier,
-		"slots", u.Slots,
-		"slots_used", u.SlotsUsed,
 		"snatches", u.Snatches)
 	if err != nil {
 		return err
@@ -656,30 +650,6 @@ func (conn *Conn) RemoveSeeder(t *storage.Torrent, p *storage.Peer) error {
 		return err
 	}
 	delete(t.Seeders, storage.PeerMapKey(p))
-	return nil
-}
-
-// IncrementSlots increment a user's Slots by one.
-// This function modifies the argument as well as the hash field in Redis.
-func (conn *Conn) IncrementSlots(u *storage.User) error {
-	hashkey := conn.conf.Prefix + UserPrefix + u.Passkey
-	slotCount, err := redis.Int(conn.Do("HINCRBY", hashkey, "slots", 1))
-	if err != nil {
-		return err
-	}
-	u.Slots = int64(slotCount)
-	return nil
-}
-
-// IncrementSlots increment a user's Slots by one.
-// This function modifies the argument as well as the hash field in Redis.
-func (conn *Conn) DecrementSlots(u *storage.User) error {
-	hashkey := conn.conf.Prefix + UserPrefix + u.Passkey
-	slotCount, err := redis.Int(conn.Do("HINCRBY", hashkey, "slots", -1))
-	if err != nil {
-		return err
-	}
-	u.Slots = int64(slotCount)
 	return nil
 }
 
