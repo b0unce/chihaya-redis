@@ -112,7 +112,7 @@ func (conn *Conn) close() {
 	conn.Conn.Close()
 }
 
-// createUser takes a string slice of length 14 and returns a pointer to a new
+// createUser takes a array of strings and returns a pointer to a new
 // storage.User or an error.
 // This function is used to create a user from a Redis hash response(HGETALL).
 // The order of strings the in the slice must follow the pattern:
@@ -120,9 +120,6 @@ func (conn *Conn) close() {
 // If the field value string cannot be converted to the correct type,
 // createUser will return a nil user and the conversion error.
 func createUser(userVals []string) (*storage.User, error) {
-	if len(userVals) != 14 {
-		return nil, ErrCreateUser
-	}
 	var user storage.User
 	var err error
 	for index, userString := range userVals {
