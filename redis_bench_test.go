@@ -225,22 +225,6 @@ func BenchmarkSetSeeder(b *testing.B) {
 	b.StartTimer()
 }
 
-func BenchmarkIncrementSlots(b *testing.B) {
-	b.StopTimer()
-	conn := createTestConn()
-	testUser := createTestUser()
-	panicOnErr(conn.AddUser(testUser))
-	b.StartTimer()
-
-	for bCount := 0; bCount < b.N; bCount++ {
-		panicOnErr(conn.IncrementSlots(testUser))
-	}
-	// Cleanup
-	b.StopTimer()
-	panicOnErr(conn.RemoveUser(testUser))
-	b.StartTimer()
-}
-
 func BenchmarkLeecherFinished(b *testing.B) {
 	b.StopTimer()
 	conn := createTestConn()
