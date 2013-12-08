@@ -113,7 +113,7 @@ func createTestRedisConn() *Conn {
 
 func createTestUser() *storage.User {
 	return &storage.User{ID: createTestUserID(), Passkey: createTestPasskey(),
-		UpMultiplier: 1.01, DownMultiplier: 1.0, Slots: 4, SlotsUsed: 2, Snatches: 7}
+		UpMultiplier: 1.01, DownMultiplier: 1.0, Snatches: 7}
 }
 
 func createTestPeer(userID uint64, torrentID uint64) *storage.Peer {
