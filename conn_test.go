@@ -19,7 +19,7 @@ import (
 func createTestConn() tracker.Conn {
 	testConfig, err := config.Open(os.Getenv("TESTCONFIGPATH"))
 	panicOnErr(err)
-	conf := &testConfig.Cache
+	conf := &testConfig.Tracker
 
 	testPool, err := tracker.Open(conf)
 	panicOnErr(err)
